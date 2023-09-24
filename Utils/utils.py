@@ -102,3 +102,52 @@ class Add_Positional_Embedding(nn.Module):
         x = x + positional
         return x
 
+def positional_encoding(H, W, C):
+    """
+    Generate positional encoding for Transformer.
+
+    Args:
+        H (int): Height.
+        W (int): Width.
+        C (int): Channel dimension.
+
+    Returns:
+        Tensor: Positional encoding tensor.
+    """
+    # Create a sequence of numbers from 0 to H - 1 and reshape it to a column vector
+    s = torch.arange(H)
+    s = s.view(H, 1)
+
+    # Create a sequence of even numbers from 0 to 2*C - 1 and reshape it to a row vector, then normalize
+    d = 2 * torch.arange(C)
+    d = d.view(1, C) / C
+
+    # Calculate positional encoding values using sine and cosine functions
+    z = s / (10000 ** d)
+    pos = torch.stack([torch.sin(z[::2, :]), torch.cos(z[::2, :])], 1).view(-1, C)
+
+    # Create positional encoding for X-coordinate by adding it to zeros
+    pos_X = pos.unsqueeze(1) + torch.zeros((H, W, C))
+
+    # Create a sequence of numbers from 0 to W - 1 and reshape it to a row vector
+    t = torch.arange(W)
+    t = t.view(1, W)
+
+    # Reshape d to a column vector and normalize
+    d = d.view(C, 1) / C
+
+    # Calculate positional encoding values for Y-coordinate using sine and cosine functions
+    z = t / (10000 ** d)
+    pos = torch.stack([torch.sin(z[:, ::2]), torch.cos(z[:, ::2])], 1).view(-1, C)
+
+    # Create positional encoding for Y-coordinate by adding it to zeros
+    pos_Y = pos.unsqueeze(0) + torch.zeros((H, W, C))
+
+    # Concatenate positional encodings for X and Y to get the final positional encoding
+    pos = torch.cat([pos_X, pos_Y], -1)
+
+    # Permute dimensions for compatibility with the model's input shape
+    pos = pos.permute(2, 0, 1)
+
+    # Add an additional dimension for the batch
+    return pos.unsqueeze(0)
