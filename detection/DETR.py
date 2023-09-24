@@ -1,4 +1,4 @@
-from Layers.layers import MultiHeadAttention
+from Layers.layers import Transformer
 from Utils.utils import positional_encoding
 import torch
 import torchvision.models as models
