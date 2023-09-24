@@ -28,8 +28,6 @@ The Detection Transformer (Detr) is a Transformer-based architecture designed fo
 
 ## Citation
 
-If you find this repository useful in your research or project, please consider citing the original Vision Transformer (ViT) paper:
-
 ```markdown
 @article{dosovitskiy2020image,
   title={An image is worth 16x16 words: Transformers for image recognition at scale},
