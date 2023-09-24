@@ -32,9 +32,13 @@ class MultiHeadAttention(nn.Module):
             torch.Tensor: Output tensor after multi-head attention computation.
 
         """
-        query = self.query_projection(x)  # B, N, D*H
-        key = self.key_projection(x)
-        value = self.value_projection(x)
+        if len(x) == 3:
+            q, k, v = x[0], x[1], x[2]
+        else:
+            q, k, v = x
+        query = self.query_projection(q)  # B, N, D*H
+        key = self.key_projection(k)
+        value = self.value_projection(v)
 
         B, N, D = x.shape
 
