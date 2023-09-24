@@ -33,11 +33,14 @@ class MultiHeadAttention(nn.Module):
 
         """
         if len(x) == 3:
-            q, k, v = x[0], x[1], x[2]
-            B, N, D = x[0].shape
+            q, k, v  = x[0], x[1], x[2]
+            B, N, D  = q.shape
+            _, N1, _ = k.shape
+            _, N2, _ = v.shape
         else:
             q, k, v = x
             B, N, D = x.shape
+            N1, N2  = N
             
         query = self.query_projection(q)  # B, N, D*H
         key = self.key_projection(k)
@@ -45,8 +48,8 @@ class MultiHeadAttention(nn.Module):
 
 
         query = query.view(B, N, self.head, self.dim)  # B, N, H, D
-        key = key.view(B, N, self.head, self.dim)
-        value = value.view(B, N, self.head, self.dim)
+        key = key.view(B, N1, self.head, self.dim)
+        value = value.view(B, N2, self.head, self.dim)
 
         query = query.transpose(1, 2)  # B, H, N, D
         key = key.transpose(1, 2)
