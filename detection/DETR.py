@@ -5,7 +5,7 @@ import torchvision.models as models
 from torch import nn
 
 
-class detection_transformerDETR(nn.Module):
+class detection_transformer(nn.Module):
     """
     DETR (Detection Transformer) Model.
 
