@@ -99,7 +99,7 @@ class TransformerEncoder(nn.Module):
         Returns:
             Tensor: Output tensor.
         """
-        a = self.MHA(x + positional_encoding, x + positional_encoding, x)
+        a = self.MHA([x + positional_encoding, x + positional_encoding, x])
         x = x + self.d1(a)
         x = self.norm(x)
         x = x + self.mlp(x)
@@ -143,10 +143,10 @@ class TransformerDecoder(nn.Module):
         Returns:
             Tensor: Output tensor.
         """
-        y = self.MHA1(x + query_embed, x + query_embed, x)
+        y = self.MHA1([x + query_embed, x + query_embed, x])
         x = x + self.d1(y)
         x = self.norm1(x)
-        z = self.MHA2(x + query_embed, memory + positional_encoding, memory)
+        z = self.MHA2([x + query_embed, memory + positional_encoding, memory])
         z = x + self.d2(z)
         z = self.norm2(z)
         return z
