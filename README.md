@@ -29,7 +29,7 @@ The Detection Transformer (Detr) is a Transformer-based architecture designed fo
 ## Citation
 
 ```markdown
-@article{dosovitskiy2020vit,
+- @article{dosovitskiy2020vit,
   title={An Image Is Worth 16x16 Words: Transformers for Image Recognition},
   author={Dosovitskiy, Alexey and Beyer, Lucas and Kolesnikov, Alexander and Weissenborn, Dirk and Zhai, Xiaohua and Unterthiner, Thomas and Dehghani, Mostafa and Minderer, Matthias and Heigold, Georg and Gelly, Sylvain and Uszkoreit, Jakob and Houlsby, Neil},
   journal={arXiv preprint arXiv:2010.11929},
@@ -40,7 +40,7 @@ The Detection Transformer (Detr) is a Transformer-based architecture designed fo
 
 
 
-@inproceedings{carion2020end,
+- @inproceedings{carion2020end,
   title={End-to-end object detection with transformers},
   author={Carion, Nicolas and Massa, Francisco and Synnaeve, Gabriel and Usunier, Nicolas and Kirillov, Alexander and Zagoruyko, Sergey},
   booktitle={European conference on computer vision},
