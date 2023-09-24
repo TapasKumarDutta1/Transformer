@@ -40,7 +40,7 @@ class MultiHeadAttention(nn.Module):
         else:
             q, k, v = x, x, x
             B, N, D = x.shape
-            N1, N2  = N
+            N1, N2  = N, N
             
         query = self.query_projection(q)  # B, N, D*H
         key = self.key_projection(k)
