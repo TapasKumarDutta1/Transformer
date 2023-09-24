@@ -9,11 +9,7 @@ This repository provides implementations of various Transformer-based architectu
 - [Introduction](#introduction)
 - [Implemented Architectures](#implemented-architectures)
   - [Vision Transformer (ViT)](#vision-transformer-vit)
-  - [Detection Transformer (Detr)](#detection-transformer-detr)
-- [Usage](#usage)
-- [Next Steps](#next-steps)
-- [Contributing](#contributing)
-- [License](#license)
+  - [Detection Transformer (DETR)](#detection-transformer-detr)
 
 ## Introduction
 
