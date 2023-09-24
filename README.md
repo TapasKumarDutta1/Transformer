@@ -35,8 +35,7 @@ The Detection Transformer (Detr) is a Transformer-based architecture designed fo
   journal={arXiv preprint arXiv:2010.11929},
   year={2020}
 }
-
----
+```markdown
 
 @inproceedings{carion2020end,
   title={End-to-end object detection with transformers},
