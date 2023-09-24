@@ -38,7 +38,7 @@ class MultiHeadAttention(nn.Module):
             _, N1, _ = k.shape
             _, N2, _ = v.shape
         else:
-            q, k, v = x
+            q, k, v = x, x, x
             B, N, D = x.shape
             N1, N2  = N
             
