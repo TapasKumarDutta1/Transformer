@@ -21,6 +21,6 @@ Transformers have revolutionized various fields in deep learning, including natu
 
 The Vision Transformer (ViT) is a novel architecture that applies the Transformer model to computer vision tasks, such as image classification. In this repository, you can find an implementation of the ViT model.
 
-## Detection Transformer (DETR)
+### Detection Transformer (DETR)
 
 The Detection Transformer (Detr) is a Transformer-based architecture designed for object detection tasks. It combines the power of Transformers with object detection, making it efficient and accurate. This repository includes an implementation of Detr, complete with pre-trained models and utilities for object detection tasks.
