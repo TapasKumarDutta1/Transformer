@@ -13,7 +13,7 @@ class PatchEmbedding(nn.Module):
         """
         super().__init__()
         self.patch_size = patch_size
-        self.proj = nn.Conv2d(in_channels, in_channels, kernel_size=patch_size, stride=patch_size)
+        self.proj = nn.Conv2d(in_channels, 3, kernel_size=patch_size, stride=patch_size)
 
     def forward(self, x):
         """
