@@ -2,9 +2,10 @@ import torch
 from torch import nn
 from Utils.utils import *
 from Layers.layers import MultiHeadAttention
+
 class VisionTransformer(nn.Module):
-    def __init__(self, H=32, W=32, num_layers=8, embed_dim=4, MLP_size=2, num_class=2,
-                 patch_size=8, num_head=2, batch_size=1, in_channel=512):
+    def __init__(self, H=384, W=384, num_layers=12, embed_dim=768, MLP_size=3072, num_class=2,
+                 patch_size=16, num_head=12, batch_size=1):
         """
         Initialize a Vision Transformer model.
 
@@ -13,12 +14,11 @@ class VisionTransformer(nn.Module):
             W (int): Width of the input image.
             num_layers (int): Number of transformer layers.
             embed_dim (int): Dimension of token embeddings.
-            MLP_size (int): Size of the MLP layers in the transformer.
+            MLP_size (int): Size of the intermediateMLP layers in the transformer.
             num_class (int): Number of output classes.
             patch_size (int): Size of image patches.
             num_head (int): Number of attention heads.
             batch_size (int): Batch size (default 1).
-            in_channel (int): Number of input channels (e.g., 3 for RGB images).
 
         """
         N = int(H * W / (patch_size ** 2))
@@ -26,31 +26,36 @@ class VisionTransformer(nn.Module):
 
         # Preprocessing layers
         self.preprocess = nn.Sequential(
-            PatchEmbedding(patch_size, in_channel),
-            Concatenate_CLS_Token(N, in_channel),
-            Add_Positional_Embedding(N + 1, in_channel)  # Adding 1 for the CLS token
+            PatchEmbedding(patch_size, embed_dim),
+            Concatenate_CLS_Token(N, embed_dim),
+            Add_Positional_Embedding(N + 1, embed_dim)  # Adding 1 for the CLS token
         )
 
         # Transformer layers
         self.transformer = nn.ModuleList([
             nn.Sequential(
-                nn.LayerNorm([N + 1, in_channel]),
-                MultiHeadAttention(num_head, in_channel, embed_dim)
+                MultiHeadAttention(num_head, embed_dim, embed_dim)
+            ) for _ in range(num_layers)
+        ])
+
+        self.layernorm = nn.ModuleList([
+            nn.Sequential(
+                nn.LayerNorm([embed_dim])
             ) for _ in range(num_layers)
         ])
 
         # MLP head
         self.mlp = nn.ModuleList([
             nn.Sequential(
-                nn.LayerNorm([N + 1, in_channel]),
-                nn.Linear(in_channel, MLP_size),
+                nn.LayerNorm([embed_dim]),
+                nn.Linear(embed_dim, MLP_size),
                 nn.GELU(),
-                nn.Linear(MLP_size, in_channel)
+                nn.Linear(MLP_size, embed_dim)
             ) for _ in range(num_layers)
         ])
 
         # Classification head
-        self.head = nn.Linear(in_channel, num_class)
+        self.head = nn.Linear(embed_dim, num_class)
 
     def forward(self, x):
         x = self.preprocess(x)
@@ -59,6 +64,7 @@ class VisionTransformer(nn.Module):
             x = x + x1
             x1 = self.mlp[i](x)
             x = x + x1
+            x = self.layernorm[i](x)
 
         # Extract the CLS token and perform classification
         out = x[:, 0, :]
