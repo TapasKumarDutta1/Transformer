@@ -15,11 +15,11 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         self.head = head
         self.dim = dim
-        self.query_projection = nn.Linear(in_dim, dim * self.head)
-        self.key_projection = nn.Linear(in_dim, dim * self.head)
-        self.value_projection = nn.Linear(in_dim, dim * self.head)
+        self.query_projection = nn.Linear(in_dim, dim )
+        self.key_projection = nn.Linear(in_dim, dim)
+        self.value_projection = nn.Linear(in_dim, dim)
 
-        self.out = nn.Linear(dim * self.head, in_dim)
+        self.out = nn.Linear(dim, in_dim)
 
     def forward(self, x):
         """
