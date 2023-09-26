@@ -4,7 +4,7 @@ from Utils.utils import *
 from Layers.layers import MultiHeadAttention
 class VisionTransformer(nn.Module):
     def __init__(self, H=32, W=32, num_layers=8, embed_dim=4, MLP_size=2, num_class=2,
-                 patch_size=8, num_head=2, batch_size=1, in_channel=3):
+                 patch_size=8, num_head=2, batch_size=1, in_channel=512):
         """
         Initialize a Vision Transformer model.
 
