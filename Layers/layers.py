@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, head, in_dim, dim):
+    def __init__(self, head, in_dim, dim, dropout=0.1):
         """
         Initialize the Multi-Head Attention layer.
 
@@ -14,14 +14,16 @@ class MultiHeadAttention(nn.Module):
         """
         super().__init__()
         self.head = head
-        self.dim = dim
-        self.query_projection = nn.Linear(in_dim, dim )
-        self.key_projection = nn.Linear(in_dim, dim)
-        self.value_projection = nn.Linear(in_dim, dim)
+        self.dim  = dim
+        self.query_projection = nn.Linear(in_dim, self.dim * self.head)
+        self.key_projection   = nn.Linear(in_dim, self.dim * self.head)
+        self.value_projection = nn.Linear(in_dim, self.dim * self.head)
+        self.dropout = None
+        if dropout  != None:
+          self.dropout = nn.Dropout(dropout)
+        self.out = nn.Linear(self.dim * self.head, in_dim)
 
-        self.out = nn.Linear(dim, in_dim)
-
-    def forward(self, x):
+    def forward(self, x, mask=None):
         """
         Forward pass of the Multi-Head Attention layer.
 
@@ -43,21 +45,27 @@ class MultiHeadAttention(nn.Module):
             N1, N2  = N, N
             
         query = self.query_projection(q)  # B, N, D*H
-        key = self.key_projection(k)
+        key   = self.key_projection(k)
         value = self.value_projection(v)
 
-
         query = query.view(B, N, self.head, self.dim)  # B, N, H, D
-        key = key.view(B, N1, self.head, self.dim)
+        key   = key.view(B, N1, self.head, self.dim)
         value = value.view(B, N2, self.head, self.dim)
 
         query = query.transpose(1, 2)  # B, H, N, D
-        key = key.transpose(1, 2)
+        key   = key.transpose(1, 2)
         value = value.transpose(1, 2)  # B, H, N, D
 
         attention_map = torch.matmul(query, key.transpose(-1, -2))  # B, H, N, N
         scaled_attention_map = attention_map / torch.sqrt(torch.tensor((self.dim)))
+        
+        if mask is not None:
+            mask = mask.unsqueeze(1)
+            scaled_attention_map = scaled_attention_map.masked_fill(mask == 0, -1e9)
+        
         scaled_attention_map = torch.nn.Softmax(-1)(scaled_attention_map)
+        if self.dropout is not None:
+            scores = self.dropout(scores)
 
         output = torch.matmul(scaled_attention_map, value)  # B, H, N, D
         output = output.transpose(1, 2)  # B, N, H, D
