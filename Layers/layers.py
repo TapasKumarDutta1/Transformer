@@ -65,7 +65,7 @@ class MultiHeadAttention(nn.Module):
         
         scaled_attention_map = torch.nn.Softmax(-1)(scaled_attention_map)
         if self.dropout is not None:
-            scores = self.dropout(scores)
+            scaled_attention_map = self.dropout(scaled_attention_map)
 
         output = torch.matmul(scaled_attention_map, value)  # B, H, N, D
         output = output.transpose(1, 2)  # B, N, H, D
