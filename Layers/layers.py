@@ -14,7 +14,7 @@ class MultiHeadAttention(nn.Module):
         """
         super().__init__()
         self.head = head
-        self.dim  = dim
+        self.dim  = dim // self.head
         self.query_projection = nn.Linear(in_dim, self.dim * self.head)
         self.key_projection   = nn.Linear(in_dim, self.dim * self.head)
         self.value_projection = nn.Linear(in_dim, self.dim * self.head)
