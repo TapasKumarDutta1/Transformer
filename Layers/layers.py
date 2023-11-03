@@ -47,7 +47,7 @@ class MultiHeadAttention(nn.Module):
         query = self.query_projection(q)  # B, N, D*H
         key   = self.key_projection(k)
         value = self.value_projection(v)
-        print(query.shape, key.shape, value.shape)
+        
         query = query.view(B, N, self.head, self.dim)  # B, N, H, D
         key   = key.view(B, N1, self.head, self.dim)
         value = value.view(B, N2, self.head, self.dim)
