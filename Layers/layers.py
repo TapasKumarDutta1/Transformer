@@ -1,6 +1,77 @@
 import torch
 from torch import nn
 
+class PositionalEncoder(nn.Module):
+    def __init__(self, d_model, max_seq_len=128):
+        """
+        Positional Encoding for Transformer Models.
+
+        Args:
+            d_model (int): Dimension of the model.
+            max_seq_len (int): Maximum sequence length.
+        """
+        super().__init__()
+        self.d_model = d_model
+
+        pe = torch.zeros(max_seq_len, d_model)
+        for pos in range(max_seq_len):
+            for i in range(0, d_model, 2):
+                pe[pos, i] = math.sin(pos / (10000 ** ((2 * i) / d_model)))
+                pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * (i + 1)) / d_model)))
+
+        pe = pe.unsqueeze(0)
+        self.register_buffer("pe", pe)
+
+    def forward(self, x):
+        """
+        Forward pass of the PositionalEncoder.
+
+        Args:
+            x (Tensor): Input tensor.
+
+        Returns:
+            Tensor: Output tensor after applying positional encoding.
+        """
+        x = x * math.sqrt(self.d_model)
+        seq_len = x.size(1)
+        x = x + torch.autograd.Variable(self.pe[:, :seq_len], requires_grad=False).to(
+            device
+        )
+        return x
+class Norm(nn.Module):
+    def __init__(self, d_model, eps=1e-6):
+        """
+        Layer Normalization for Transformer.
+
+        Args:
+            d_model (int): Dimension of the model.
+            eps (float): Epsilon value.
+        """
+        super().__init__()
+
+        self.size = d_model
+        self.alpha = nn.Parameter(torch.ones(self.size))
+        self.bias = nn.Parameter(torch.zeros(self.size))
+        self.eps = eps
+
+    def forward(self, x):
+        """
+        Forward pass of the normalization layer.
+
+        Args:
+            x (Tensor): Input tensor.
+
+        Returns:
+            Tensor: Normalized output tensor.
+        """
+        norm = (
+            self.alpha
+            * (x - x.mean(dim=-1, keepdim=True))
+            / (x.std(dim=-1, keepdim=True) + self.eps)
+            + self.bias
+        )
+        return norm
+
 class MultiHeadAttention(nn.Module):
     def __init__(self, head, in_dim, dim, dropout=0.1):
         """
