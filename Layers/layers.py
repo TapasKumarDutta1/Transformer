@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import math
 
 class PositionalEncoder(nn.Module):
     def __init__(self, d_model, max_seq_len=128, device='cuda'):
