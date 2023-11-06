@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import math
 
 class PatchEmbedding(nn.Module):
     def __init__(self, patch_size, in_channels):
