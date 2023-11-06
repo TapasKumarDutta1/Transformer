@@ -36,6 +36,15 @@ The Detection Transformer (Detr) is a Transformer-based architecture designed fo
   year={2020}
 }
 
+@misc{vaswani2023attention,
+      title={Attention Is All You Need}, 
+      author={Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
+      year={2023},
+      eprint={1706.03762},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
 @inproceedings{carion2020end,
   title={End-to-end object detection with transformers},
   author={Carion, Nicolas and Massa, Francisco and Synnaeve, Gabriel and Usunier, Nicolas and Kirillov, Alexander and Zagoruyko, Sergey},
