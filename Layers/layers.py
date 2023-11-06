@@ -2,17 +2,18 @@ import torch
 from torch import nn
 
 class PositionalEncoder(nn.Module):
-    def __init__(self, d_model, max_seq_len=128):
+    def __init__(self, d_model, max_seq_len=128, device='cuda'):
         """
         Positional Encoding for Transformer Models.
 
         Args:
             d_model (int): Dimension of the model.
             max_seq_len (int): Maximum sequence length.
+            device : Device to run layer on.
         """
         super().__init__()
         self.d_model = d_model
-
+        self.device  = device
         pe = torch.zeros(max_seq_len, d_model)
         for pos in range(max_seq_len):
             for i in range(0, d_model, 2):
@@ -35,7 +36,7 @@ class PositionalEncoder(nn.Module):
         x = x * math.sqrt(self.d_model)
         seq_len = x.size(1)
         x = x + torch.autograd.Variable(self.pe[:, :seq_len], requires_grad=False).to(
-            device
+            self.device
         )
         return x
 class Norm(nn.Module):
@@ -160,6 +161,7 @@ class TransformerEncoder(nn.Module):
         self.MHA = MultiHeadAttention(num_head, in_channel, embed_dim)
         # Dropout Layer
         self.d1 = nn.Dropout(p=0.1)
+        self.d2 = nn.Dropout(p=0.1)
         # Layer Normalization
         self.norm = nn.LayerNorm([N, in_channel])
         # MLP Layer
