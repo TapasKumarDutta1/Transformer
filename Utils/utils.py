@@ -102,6 +102,45 @@ class Add_Positional_Embedding(nn.Module):
         x = x + positional
         return x
 
+class PositionalEncoder(nn.Module):
+    def __init__(self, d_model, max_seq_len=128, device='cuda'):
+        """
+        Positional Encoding for Transformer Models.
+
+        Args:
+            d_model (int): Dimension of the model.
+            max_seq_len (int): Maximum sequence length.
+            device : Device to run layer on.
+        """
+        super().__init__()
+        self.d_model = d_model
+        self.device  = device
+        pe = torch.zeros(max_seq_len, d_model)
+        for pos in range(max_seq_len):
+            for i in range(0, d_model, 2):
+                pe[pos, i] = math.sin(pos / (10000 ** ((2 * i) / d_model)))
+                pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * (i + 1)) / d_model)))
+
+        pe = pe.unsqueeze(0)
+        self.register_buffer("pe", pe)
+
+    def forward(self, x):
+        """
+        Forward pass of the PositionalEncoder.
+
+        Args:
+            x (Tensor): Input tensor.
+
+        Returns:
+            Tensor: Output tensor after applying positional encoding.
+        """
+        x = x * math.sqrt(self.d_model)
+        seq_len = x.size(1)
+        x = x + torch.autograd.Variable(self.pe[:, :seq_len], requires_grad=False).to(
+            self.device
+        )
+        return x
+        
 def positional_encoding(H, W, C):
     """
     Generate positional encoding for Transformer.
