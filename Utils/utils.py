@@ -104,7 +104,7 @@ class Add_Positional_Embedding(nn.Module):
         return x
 
 class PositionalEncoder(nn.Module):
-    def __init__(self, d_model, max_seq_len=128, device='cuda'):
+    def __init__(self, d_model, max_seq_len=128, device='cpu'):
         """
         Positional Encoding for Transformer Models.
 
