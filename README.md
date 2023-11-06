@@ -10,6 +10,7 @@ This repository provides implementations of various Transformer-based architectu
 - [Implemented Architectures](#implemented-architectures)
   - [Vision Transformer (ViT)](#vision-transformer-vit)
   - [Detection Transformer (DETR)](#detection-transformer-detr)
+  - [Attention is all you need](#attention-is-all-you-need)
 - [Citation](#Citation)
 
 ## Introduction
@@ -25,6 +26,10 @@ The Vision Transformer (ViT) is a novel architecture that applies the Transforme
 ### Detection Transformer (DETR)
 
 The Detection Transformer (Detr) is a Transformer-based architecture designed for object detection tasks. It combines the power of Transformers with object detection, making it efficient and accurate. This repository includes an implementation of Detr, complete with pre-trained models and utilities for object detection tasks.
+
+### Attention Is All You Need (Transformer Architecture)
+"Attention Is All You Need" introduced a groundbreaking Transformer architecture pivotal in natural language processing (NLP). This repository houses an implementation of the Transformer model, enabling users to explore and utilize this transformative architecture in NLP tasks.
+
 
 ## Citation
 
